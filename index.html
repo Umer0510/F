@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOOD MART - Inventory Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://drive.google.com/thumbnail?id=1UZUtFzV92YLLJJb7H13ohTWiNmQ_NefA">
+</head>
+<body>
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Login</h2>
+                <button class="close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="authForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Login</button>
+                    <div class="form-footer">
+                        <a href="#" id="toggleForm">Create an account</a>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Account</h2>
+                <button class="close-modal" id="closeRegisterModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">Full Name *</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email *</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Contact Number *</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regAddress">Delivery Address *</label>
+                        <textarea id="regAddress" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password *</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Create Account</button>
+                    <div class="form-footer">
+                        <a href="#" id="toggleToLogin">Already have an account? Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Confirmation Modal -->
+    <div class="modal" id="addressModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Delivery Address</h2>
+                <button class="close-modal" id="closeAddressModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="address-confirmation">
+                    <p>Please confirm your delivery address before checkout:</p>
+                    <div class="address-details" id="addressDetails"></div>
+                    <div class="form-group">
+                        <label for="deliveryInstructions">Delivery Instructions (Optional)</label>
+                        <textarea id="deliveryInstructions" rows="3" placeholder="e.g., Leave at front door, call on arrival, etc."></textarea>
+                    </div>
+                    <button class="btn" id="confirmAddressBtn" style="width: 100%;">Confirm Address & Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button class="close-modal" id="closeCartModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">₹0.00</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="https://drive.google.com/thumbnail?id=1UZUtFzV92YLLJJb7H13ohTWiNmQ_NefA" alt="FOOD MART Logo" class="logo-img">
+                <span>FOOD MART</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#" class="section-toggle" data-section="about">About</a></li>
+                    <li><a href="#" class="section-toggle" data-section="contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-account">
+                <a href="#" id="userBtn"><i class="fas fa-user"></i> <span id="userText">Login</span></a>
+                <a href="#" id="cartBtn"><i class="fas fa-shopping-cart"></i> Cart <span class="cart-count" id="cartCount">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slideshow -->
+    <section class="container" id="home">
+        <div class="slideshow-container" id="slideshow">
+            <div class="loader" id="slideshowLoader"></div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="container" id="products">
+        <div class="section-title">
+            <h2>Our Products</h2>
+        </div>
+        <div class="products-grid" id="productsContainer">
+            <div class="loader" id="productsLoader"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section container">
+        <div class="section-title">
+            <h2>About Us</h2>
+        </div>
+        <div class="about-content">
+            <img src="https://via.placeholder.com/500x300" alt="About Us" class="about-img">
+            <div class="about-text">
+                <h3>Welcome to Food Mart</h3>
+                <p>
+                    At Food Mart, we believe in delivering fresh, quality groceries right at your doorstep. 
+                    From daily essentials to premium products, our mission is to make your shopping easy, 
+                    affordable, and enjoyable.
+                </p>
+                <p>
+                    With a wide range of products, fast delivery, and customer-first service, 
+                    Food Mart is your trusted neighborhood grocery partner.
+                </p>
+                <a href="#" class="btn contact-toggle" data-section="contact">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section container">
+        <div class="section-title">
+            <h2>Contact Us</h2>
+        </div>
+        <div class="contact-grid">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3>Get in Touch</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Market Street, New Delhi, India</p>
+                <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                <p><i class="fas fa-envelope"></i> support@foodmart.com</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Your Name</label>
+                    <input type="text" id="contactName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Your Email</label>
+                    <input type="email" id="contactEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Your Message</label>
+                    <textarea id="contactMessage" rows="5" placeholder="Type your message..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>FOOD MART</h3>
+                    <p>Bringing quality groceries to your table since 2010. Fresh products at affordable prices.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#" class="section-toggle" data-section="about">About Us</a>
+                    <a href="#" class="section-toggle" data-section="contact">Contact</a>
+                    <a href="#">FAQs</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Products</h3>
+                    <a href="#">Fruits & Vegetables</a>
+                    <a href="#">Dairy Products</a>
+                    <a href="#">Bakery Items</a>
+                    <a href="#">Beverages</a>
+                    <a href="#">Snacks</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Grocery Street, Cityville</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@foodmart.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Sat: 8am - 10pm</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 FOOD MART. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
