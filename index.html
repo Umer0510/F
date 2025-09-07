@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOOD MART - Inventory Management</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="https://drive.google.com/thumbnail?id=1UZUtFzV92YLLJJb7H13ohTWiNmQ_NefA">
 </head>
 <body>
-    <!-- Notification -->
+<!-- Notification -->
     <div class="notification" id="notification"></div>
 
     <!-- Login Modal -->
@@ -77,6 +78,37 @@
         </div>
     </div>
 
+    <!-- Profile Edit Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="close-modal" id="closeProfileModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="profileName">Full Name *</label>
+                        <input type="text" id="profileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Email *</label>
+                        <input type="email" id="profileEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Contact Number *</label>
+                        <input type="tel" id="profilePhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileAddress">Delivery Address *</label>
+                        <textarea id="profileAddress" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Address Confirmation Modal -->
     <div class="modal" id="addressModal">
         <div class="modal-content">
@@ -88,11 +120,34 @@
                 <div class="address-confirmation">
                     <p>Please confirm your delivery address before checkout:</p>
                     <div class="address-details" id="addressDetails"></div>
-                    <div class="form-group">
-                        <label for="deliveryInstructions">Delivery Instructions (Optional)</label>
-                        <textarea id="deliveryInstructions" rows="3" placeholder="e.g., Leave at front door, call on arrival, etc."></textarea>
+                    <button class="btn-outline" id="editAddressBtn" style="margin: 10px 0;">Edit Address</button>
+                    <div class="address-edit-form" id="addressEditForm">
+                        <div class="form-group">
+                            <label for="editAddress">Delivery Address *</label>
+                            <textarea id="editAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="deliveryInstructions">Delivery Instructions (Optional)</label>
+                            <textarea id="deliveryInstructions" rows="3" placeholder="e.g., Leave at front door, call on arrival, etc."></textarea>
+                        </div>
+                        <button class="btn" id="saveAddressBtn">Save Address</button>
                     </div>
-                    <button class="btn" id="confirmAddressBtn" style="width: 100%;">Confirm Address & Proceed to Checkout</button>
+                    <button class="btn" id="confirmAddressBtn" style="width: 100%; margin-top: 15px;">Confirm Address & Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Modal -->
+    <div class="modal" id="ordersModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Orders</h2>
+                <button class="close-modal" id="closeOrdersModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="ordersContainer">
+                    <p>Loading your orders...</p>
                 </div>
             </div>
         </div>
@@ -135,6 +190,11 @@
             <div class="user-account">
                 <a href="#" id="userBtn"><i class="fas fa-user"></i> <span id="userText">Login</span></a>
                 <a href="#" id="cartBtn"><i class="fas fa-shopping-cart"></i> Cart <span class="cart-count" id="cartCount">0</span></a>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="#" id="profileBtn"><i class="fas fa-user-edit"></i> Edit Profile</a>
+                    <a href="#" id="ordersBtn"><i class="fas fa-clipboard-list"></i> My Orders</a>
+                    <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </div>
         </div>
     </header>
@@ -156,26 +216,23 @@
         </div>
     </section>
 
+    <!-- Orders Section -->
+    <section id="orders" class="orders-section container">
+        <div class="section-title">
+            <h2>Order Status</h2>
+        </div>
+        <div id="ordersContent">
+            <p>Please log in to view your order status.</p>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about-section container">
         <div class="section-title">
             <h2>About Us</h2>
         </div>
-        <div class="about-content">
-            <img src="https://via.placeholder.com/500x300" alt="About Us" class="about-img">
-            <div class="about-text">
-                <h3>Welcome to Food Mart</h3>
-                <p>
-                    At Food Mart, we believe in delivering fresh, quality groceries right at your doorstep. 
-                    From daily essentials to premium products, our mission is to make your shopping easy, 
-                    affordable, and enjoyable.
-                </p>
-                <p>
-                    With a wide range of products, fast delivery, and customer-first service, 
-                    Food Mart is your trusted neighborhood grocery partner.
-                </p>
-                <a href="#" class="btn contact-toggle" data-section="contact">Contact Us</a>
-            </div>
+        <div class="about-content" id="aboutContent">
+            <div class="loader"></div>
         </div>
     </section>
 
@@ -184,36 +241,8 @@
         <div class="section-title">
             <h2>Contact Us</h2>
         </div>
-        <div class="contact-grid">
-            <!-- Contact Info -->
-            <div class="contact-info">
-                <h3>Get in Touch</h3>
-                <p><i class="fas fa-map-marker-alt"></i> 123 Market Street, New Delhi, India</p>
-                <p><i class="fas fa-phone"></i> +91 98765 43210</p>
-                <p><i class="fas fa-envelope"></i> support@foodmart.com</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <!-- Contact Form -->
-            <form class="contact-form" id="contactForm">
-                <div class="form-group">
-                    <label for="contactName">Your Name</label>
-                    <input type="text" id="contactName" placeholder="Enter your name" required>
-                </div>
-                <div class="form-group">
-                    <label for="contactEmail">Your Email</label>
-                    <input type="email" id="contactEmail" placeholder="Enter your email" required>
-                </div>
-                <div class="form-group">
-                    <label for="contactMessage">Your Message</label>
-                    <textarea id="contactMessage" rows="5" placeholder="Type your message..." required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
+        <div class="contact-grid" id="contactContent">
+            <div class="loader"></div>
         </div>
     </section>
 
@@ -260,7 +289,8 @@
             </div>
         </div>
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
     <script src="script.js"></script>
+    
 </body>
 </html>
