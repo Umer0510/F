@@ -1,21 +1,21 @@
 :root {
-    --primary: #4CAF50;
-    --primary-dark: #388E3C;
-    --secondary: #FF9800;
-    --light: #F5F5F5;
-    --dark: #212121;
-    --gray: #757575;
-    --white: #FFFFFF;
-    --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    --transition: all 0.3s ease;
-}
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #FF9800;
+            --light: #F5F5F5;
+            --dark: #212121;
+            --gray: #757575;
+            --white: #FFFFFF;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
 html {
     font-size: 100%;
@@ -115,6 +115,42 @@ nav ul li a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+}
+
+.user-dropdown {
+    display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 200px;
+            z-index: 102;
+            margin-top: 10px;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-dropdown a {
+    display: block;
+    padding: 12px 15px;
+    color: var(--dark);
+    text-decoration: none;
+    border-bottom: 1px solid #d1f2cc;
+    transition: var(--transition);
+}
+
+.user-dropdown a:hover {
+    background-color: #ceefca;
+    color: var(--primary);
+}
+
+.user-dropdown a:last-child {
+    border-bottom: none;
 }
 
 .user-account a {
@@ -481,6 +517,65 @@ nav ul li a:hover {
     box-shadow: var(--card-shadow);
 }
 
+/* Orders Section */
+.orders-section {
+    display: none;
+    padding: 40px 0;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.orders-table th, .orders-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table th {
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+.orders-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.order-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-processing {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 /* Footer */
 footer {
     background-color: var(--dark);
@@ -670,6 +765,11 @@ footer {
     border: 1px solid #ddd;
 }
 
+.address-edit-form {
+    display: none;
+    margin-top: 15px;
+}
+
 /* Cart Styles */
 .cart-items {
     margin: 20px 0;
@@ -818,6 +918,17 @@ footer {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--secondary);
+    color: var(--secondary);
+}
+
+.btn-outline:hover {
+    background: var(--secondary);
+    color: white;
+}
+
 /* Image loading state */
 .image-placeholder {
     width: 100%;
@@ -954,6 +1065,14 @@ footer {
     .footer-content {
         grid-template-columns: 1fr 1fr;
     }
+
+    .orders-table {
+        font-size: 0.8rem;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 10px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1030,10 +1149,12 @@ footer {
     
     .product-actions {
         flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     .quantity-controls {
-        margin-bottom: 0;
+        margin-bottom: 10px;
     }
     
     .footer-content {
@@ -1079,6 +1200,14 @@ footer {
     .btn {
         padding: 10px 20px;
         width: 100%;
+    }
+
+    .orders-table {
+        font-size: 0.7rem;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 8px 5px;
     }
 }
 
@@ -1151,3 +1280,11 @@ footer {
         transition-duration: 0.01ms !important;
     }
 }
+#addressModal {
+            z-index: 1001;
+        }
+
+        /* Fix for cart modal z-index */
+        #cartModal {
+            z-index: 1000;
+        }
